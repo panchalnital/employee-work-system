@@ -56,6 +56,8 @@ Daily narrative updates do not change task statuses. Employees update statuses s
 | task_history | Status change trail | Task and actor foreign keys |
 | login_attempts | Account-based login throttling | SHA-256 normalized email key |
 
+
+
 ```mermaid
 erDiagram
  users ||--o{ tasks : assigned_or_created
@@ -63,6 +65,7 @@ erDiagram
  tasks ||--o{ task_history : records
  users ||--o{ task_history : changes
 ```
+
 
 Indexes support employee/status/deadline filtering and task history lookup. Foreign keys prevent orphan rows. Row locks plus version checks protect concurrent status edits. Task creation and history insertion are one transaction. Status changes and audit insertion are also one transaction. Task deletion is intentionally not exposed.
 
@@ -84,3 +87,48 @@ For a larger application, split the presentation into templates and introduce co
 |---|---|---|
 | Manager | admin@gmail.com | Manager@12345 |
 | Employee | nital@gmail.com | Employee@12345 |
+
+
+# Manager side pages 
+## Main Screen Manager Login page
+
+![Alt text](projectsimage/managerlogin.png?raw=true "Main screen")
+
+
+## JOIN YOUR TEAM team registion page 
+![Alt text](projectsimage/teamregistetion.PNG?raw=true "Main screen")
+
+
+## Manager dashboard
+![Alt text](projectsimage/managerdarshab.PNG?raw=true "Main screen")
+
+
+## Manager create task
+![Alt text](projectsimage/managercreatetask.PNG?raw=true "Main screen")
+
+## Manager daily updates task
+![Alt text](projectsimage/managerdailyupdate.PNG?raw=true "Main screen")
+
+## Manager Performance task
+![Alt text](projectsimage/managerperformance.PNG?raw=true "Main screen")
+
+# employee side pages 
+
+## Main Screen employee Login page
+
+![Alt text](projectsimage/employeelogin.png?raw=true "Main screen")
+
+
+## Main Screen employee dashboard page
+
+![Alt text](projectsimage/employeedarshab.png?raw=true "Main screen")
+
+## Main Screen employee Tasks page
+
+![Alt text](projectsimage/employeetaks.png?raw=true "Main screen")
+
+
+## Main Screen employee daily updates page
+
+![Alt text](projectsimage/employeedailyupdate.png?raw=true "Main screen")
+
