@@ -96,21 +96,21 @@ For a larger application, split the presentation into templates and introduce co
 
 
 ## JOIN YOUR TEAM team registion page 
-![Alt text](projectsimage/teamregistetion.PNG?raw=true "Main screen")
+![Alt text](projectsimage/teamregistetion.png?raw=true "Main screen")
 
 
 ## Manager dashboard
-![Alt text](projectsimage/managerdarshab.PNG?raw=true "Main screen")
+![Alt text](projectsimage/managerdarshab.png?raw=true "Main screen")
 
 
 ## Manager create task
-![Alt text](projectsimage/managercreatetask.PNG?raw=true "Main screen")
+![Alt text](projectsimage/managercreatetask.png?raw=true "Main screen")
 
 ## Manager daily updates task
-![Alt text](projectsimage/managerdailyupdate.PNG?raw=true "Main screen")
+![Alt text](projectsimage/managerdailyupdate.png?raw=true "Main screen")
 
 ## Manager Performance task
-![Alt text](projectsimage/managerperformance.PNG?raw=true "Main screen")
+![Alt text](projectsimage/managerperformance.png?raw=true "Main screen")
 
 # employee side pages 
 
