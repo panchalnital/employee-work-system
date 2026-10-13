@@ -1,6 +1,6 @@
 # Employee Daily Work Update & Performance Evaluation System
 
-PHP/MySQL assignment. Server-rendered, responsive UI; no JavaScript build step or Composer dependencies. Designed for PHP 8.2+ and MySQL 8.0+ with PDO MySQL. Runtime compatibility still needs verification in your PHP/MySQL environment.
+PHP/MySQL assignment using object-oriented programming and MVC. Server-rendered, responsive UI; no JavaScript build step or Composer dependencies. Designed for PHP 8.2+ and MySQL 8.0+ with PDO MySQL. Runtime compatibility still needs verification in your PHP/MySQL environment.
 
 ## Included functionality
 
@@ -19,19 +19,37 @@ PHP/MySQL assignment. Server-rendered, responsive UI; no JavaScript build step o
 2. From MySQL's administrative client, run the following. Replace the sample password before executing:
 
 
-
-3. Import schema with your administrative account:
-
-```bash
+```sql
 mysql -u root -p employee_work < database/schema.sql
 mysql -u root -p employee_work < database/seed.sql
 ```
 
-Edit `app/config.php` to match your database host, credentials and timezone. The runtime account deliberately has no schema-changing permissions.
+3. Import schema with your administrative account:
 
 
+Edit `config.php` to match your database host, credentials and timezone. The runtime account deliberately has no schema-changing permissions.
 
-4. Start the development server from the project root:
+4. The schema import automatically creates these demo accounts:
+
+| Role | Email | Demo password |
+|---|---|---|
+| Manager | admin@gmail.com | Manager@12345 |
+| Employee | nital@gmail.com | Employee@12345 |
+
+Passwords are stored as salted bcrypt hashes, not plaintext. These credentials are for local demo testing only; remove or replace the demo accounts before public deployment.
+
+If you already imported the earlier schema, import only the seed file; do not reimport the table definitions:
+
+```bash
+mysql -u root -p employee_work < database/seed.sql
+```
+
+In phpMyAdmin, select `employee_work`, choose **Import**, and upload `database/seed.sql`. On a fresh installation import `database/schema.sql` instead, which includes these same accounts. The seed leaves existing matching email addresses and passwords unchanged. If an account already existed, continue using its original password.
+
+Optional additional accounts can still be created with `bin/create-user.php`; it reads a 12–72 byte password from standard input.
+
+5. Start the development server from the project root:
+
 
 Visit http://127.0.0.1/employee-work-system/public/index.php. Only `public/` should be the web document root. Never serve the entire project directory. PHP's development server is for local testing.
 
@@ -46,6 +64,7 @@ Visit http://127.0.0.1/employee-work-system/public/index.php. Only `public/` sho
 Daily narrative updates do not change task statuses. Employees update statuses separately. A task becomes overdue after its deadline date ends in the configured timezone. No cron job is required.
 
 
+
 ## Database design
 
 | Table | Purpose | Relationships and constraints |
@@ -56,8 +75,6 @@ Daily narrative updates do not change task statuses. Employees update statuses s
 | task_history | Status change trail | Task and actor foreign keys |
 | login_attempts | Account-based login throttling | SHA-256 normalized email key |
 
-
-
 ```mermaid
 erDiagram
  users ||--o{ tasks : assigned_or_created
@@ -66,28 +83,28 @@ erDiagram
  users ||--o{ task_history : changes
 ```
 
-
 Indexes support employee/status/deadline filtering and task history lookup. Foreign keys prevent orphan rows. Row locks plus version checks protect concurrent status edits. Task creation and history insertion are one transaction. Status changes and audit insertion are also one transaction. Task deletion is intentionally not exposed.
 
-## Code organization
+## OOP and MVC architecture
 
-- `public/index.php`: request dispatch and HTML presentation.
-- `public/style.css`: responsive UI.
-- `app/bootstrap.php`: configuration, PDO, sessions and shared helpers.
-- `app/actions.php`: mutation validation, authorization and transaction logic.
-- `database/schema.sql`: normalized relational schema.
-- `bin/create-user.php`: offline account provisioning.
-- `tests/unit.php`: scoring, escaping and date validation checks.
+The application now uses namespaced classes with constructor dependency injection. `public/index.php` is a small front controller. `app/bootstrap.php` wires dependencies; `Core/Router.php` routes requests to dedicated controllers. Models own SQL and persistence, services own multi-step business rules, and views render data supplied by controllers.
 
-For a larger application, split the presentation into templates and introduce controllers/repositories; this submission keeps dependencies minimal and core PHP logic easy to inspect.
-
-
-
-| Role | Email | Demo password |
+| Layer | Directory | Responsibilities |
 |---|---|---|
-| Manager | admin@gmail.com | Manager@12345 |
-| Employee | nital@gmail.com | Employee@12345 |
+| Front controller | `public/index.php` | Exception handling, application boot and dispatch |
+| Core | `app/Core/` | Routing, PDO connection, transaction wrapper, request validation, session/CSRF and rendering |
+| Controllers | `app/Controllers/` | Authentication, dashboard, task, daily update and report request handling |
+| Models | `app/Models/` | User, Task, DailyUpdate, Report and LoginAttempt database operations |
+| Services | `app/Services/` | Authentication, allocation/status workflow and performance calculations |
+| Views | `app/Views/` | Shared layout and six page templates; no SQL queries |
+| Bootstrap | `app/bootstrap.php` | Create shared dependencies and inject them into classes |
+| Autoloading | `app/autoload.php` | Map `App` namespaces to files without Composer |
+| Helpers | `app/helpers.php` | HTML escaping and CSRF hidden field only |
+| CLI | `bin/create-user.php` | Provision manager or employee accounts through the User model |
+| Database | `database/` | Existing schema and demo account seed |
+| Tests | `tests/unit.php` | Pure service, validator and request checks; no database/config required |
 
+See `ARCHITECTURE.md` for class responsibilities, OOP examples and request flow. Existing URLs, demo accounts and database tables remain compatible. For an existing installation, keep your `config.php` and database, replace application source files, and remove obsolete `app/actions.php`. Do not reimport schema or overwrite configuration. 
 
 # Manager side pages 
 ## Main Screen Manager Login page
@@ -131,4 +148,5 @@ For a larger application, split the presentation into templates and introduce co
 ## Main Screen employee daily updates page
 
 ![Alt text](projectsimage/employeedailyupdate.png?raw=true "Main screen")
+
 

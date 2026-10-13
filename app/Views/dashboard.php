@@ -1,0 +1,3 @@
+
+<p class="eyebrow"><?=e(date('l, d F Y'))?></p><h1><?=$manager?'Your team at a glance.':'Make today count.'?></h1><p>Track progress, surface blockers, and close the loop.</p><div class="stats"><?php foreach($stats as $label=>$value): ?><section><span><?=e(ucfirst($label))?></span><strong><?=e($value)?></strong></section><?php endforeach ?></div>
+<section><h2>What needs attention</h2><p>Overdue means the deadline has passed and the task is still open. Tasks due today remain on time until the end of the day.</p><a class="button" href="?page=tasks&status=overdue">View overdue tasks</a></section>

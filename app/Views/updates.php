@@ -1,0 +1,6 @@
+
+<h1>Daily updates</h1><p>Record achievements, next steps, and work that needs support.</p>
+<?php if(!$manager): ?><section><h2>Today · <?=e($today)?></h2><form method="post" class="grid"><?=csrf()?><input type="hidden" name="action" value="daily"><?php foreach(['accomplished'=>'Accomplished','todo'=>'To do next','pending'=>'Pending work','blockers'=>'Blockers / help needed'] as $key=>$label): ?><label><?=$label?><textarea name="<?=$key?>" maxlength="5000" <?=$key==='accomplished'?'required':''?>><?=e($daily[$key]??'')?></textarea></label><?php endforeach ?><button>Save today's update</button></form></section><?php endif ?>
+<?php if(!$updates): ?><section>No daily updates yet.</section><?php endif ?>
+<?php foreach($updates as $d): ?><section><h2><?=e($d['name'])?> <small><?=e($d['work_date'])?></small></h2><div class="grid"><?php foreach(['accomplished','todo','pending','blockers'] as $k): ?><div><b><?=e(ucfirst($k))?></b><p class="preserve"><?=e($d[$k]?:'—')?></p></div><?php endforeach ?></div></section><?php endforeach ?>
+<?php if($offset): ?><a href="?page=updates&offset=<?=max(0,$offset-50)?>">Previous</a><?php endif ?> <?php if($more): ?><a href="?page=updates&offset=<?=$offset+50?>">Next</a><?php endif ?>

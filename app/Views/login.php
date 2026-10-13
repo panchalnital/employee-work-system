@@ -1,0 +1,2 @@
+
+<section class="login"><p class="eyebrow">YOUR TEAM, IN FOCUS</p><h1>Welcome back.</h1><p>Sign in to keep your work moving.</p><form method="post"><?=csrf()?><input type="hidden" name="action" value="login"><label>Email<input type="email" name="email" maxlength="190" autocomplete="username" required></label><label>Password<input type="password" name="password" maxlength="200" autocomplete="current-password" required></label><button>Sign in</button></form><p>New employee? <a href="?page=register">Create an account</a></p></section>
